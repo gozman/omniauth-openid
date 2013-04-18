@@ -77,7 +77,12 @@ module OmniAuth
       end
 
       def callback_phase
-        return fail!(:invalid_credentials) unless openid_response && openid_response.status == :success
+        unless openid_response && openid_response.status == :success
+           Rails.logger.error("-------- INVALID CRED ERROR --------")
+           Rails.logger.error(openid_response.to_yaml)
+           Rails.logger.error("------ END INVALID CRED ERROR ------")
+          return fail!(:invalid_credentials)
+        end
         super
       end
 
